@@ -23,6 +23,7 @@ import { PhaseManager } from "#app/phase-manager";
 import { FieldSpritePipeline } from "#app/pipelines/field-sprite";
 import { InvertPostFX } from "#app/pipelines/invert";
 import { SpritePipeline } from "#app/pipelines/sprite";
+import { getCredits, onCreditsChange } from "#app/pokegame/hook";
 import { SceneBase } from "#app/scene-base";
 import { TurnCommandManager } from "#app/turn-command-manager";
 import { UiInputs } from "#app/ui-inputs";
@@ -663,6 +664,7 @@ export class BattleScene extends SceneBase {
     this.updateBiomeWaveText();
     this.updateMoneyText();
     this.updateScoreText();
+    onCreditsChange(() => this.updateScoreText()); // Pokegame: redraw when the server reports new credits
   }
 
   async initExpSprites(): Promise<void> {
@@ -2188,10 +2190,10 @@ export class BattleScene extends SceneBase {
   }
 
   updateScoreText(): void {
-    const { score } = this;
+    // Pokegame: the HUD shows the player's credits (points earned on the Pokegame server), in every mode
     this.scoreText // formatting
-      .setText(i18next.t("battleScene:score", { score }))
-      .setVisible(this.gameMode.isDaily);
+      .setText(`Credits: ${getCredits()}`)
+      .setVisible(true);
   }
 
   /**

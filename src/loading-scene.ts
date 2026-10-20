@@ -490,10 +490,10 @@ export class LoadingScene extends SceneBase {
 
     this.load
       .once(this.LOAD_EVENTS.START, () => {
-        // Pokegame: no intro video, straight to the loading bar
+        // Pokegame: no intro video, no logo, no disclaimer: just the bar
         intro.destroy();
         for (const g of loadingGraphics) {
-          g.setVisible(true);
+          g.setVisible(g !== logo && g !== disclaimerText && g !== disclaimerDescriptionText);
         }
       })
       .on(this.LOAD_EVENTS.PROGRESS, (progress: number) => {
@@ -514,10 +514,7 @@ export class LoadingScene extends SceneBase {
             }
             break;
           case "logo":
-            logo.setTexture("logo");
-            if (mobile) {
-              logo.setVisible(true);
-            }
+            // Pokegame: no logo on the loading screen
             break;
         }
       })
