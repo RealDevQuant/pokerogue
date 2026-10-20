@@ -1,6 +1,5 @@
 import { pokerogueApi } from "#api/api";
 import { loggedInUser } from "#app/account";
-import { FAKE_TITLE_LOGO_CHANCE } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { timedEventManager } from "#app/global-event-manager";
 import { globalScene } from "#app/global-scene";
@@ -16,7 +15,7 @@ import type { SettingsUpdateEventArgs } from "#types/event-bus-types";
 import { TimedEventDisplay } from "#ui/event-display";
 import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { addTextObject } from "#ui/text";
-import { fixedInt, randInt, randItem } from "#utils/common";
+import { fixedInt, randItem } from "#utils/common";
 import { getEnumValues } from "#utils/enums";
 import i18next, { type TOptions } from "i18next";
 
@@ -71,8 +70,8 @@ export class TitleUiHandler extends OptionSelectUiHandler {
       .setAlpha(0);
     ui.add(this.titleContainer);
 
-    const logo = globalScene.add
-      .image(width / 2, 8, this.getLogo()) // formatting
+    // Pokegame: a text title instead of the PokéRogue logo (same place, same height as the 150x33 image)
+    const logo = addTextObject(width / 2, 10, "PokeGame", TextStyle.MESSAGE, { fontSize: "216px" }) // formatting
       .setOrigin(0.5, 0);
 
     if (timedEventManager.isEventActive()) {
@@ -176,22 +175,12 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     }
 
     const scaledHeight = globalScene.scaledCanvas.height;
-    const windowHeight = this.windowHeight;
 
     this.updateUsername();
 
-    // Move username and player count to top of the menu and sort it,
-    // to display the shorter one on top
-    const UPPER_LABEL = scaledHeight - 23 - windowHeight;
-    const LOWER_LABEL = scaledHeight - 13 - windowHeight;
-
-    if (this.usernameLabel.width < this.playerCountLabel.width) {
-      this.usernameLabel.setY(UPPER_LABEL);
-      this.playerCountLabel.setY(LOWER_LABEL);
-    } else {
-      this.usernameLabel.setY(LOWER_LABEL);
-      this.playerCountLabel.setY(UPPER_LABEL);
-    }
+    // Pokegame: username bottom-left, no online player count
+    this.usernameLabel.setOrigin(0, 1).setPosition(2, scaledHeight - 2);
+    this.playerCountLabel.setVisible(false);
 
     this.splashMessage = randItem(getSplashMessages());
     this.splashMessageText.setText(i18next.t(this.splashMessage, this.getSplashMessageI18nParams()));
@@ -245,17 +234,6 @@ export class TitleUiHandler extends OptionSelectUiHandler {
       alpha: (target: any) => (target === this.titleContainer ? 0 : 1),
       ease: "Sine.easeInOut",
     });
-  }
-
-  /**
-   * Get the logo file path to load, with a 0.1% chance to use the fake logo instead.
-   * @returns The path to the image.
-   */
-  private getLogo(): string {
-    // Invert spawn chances on april fools
-    const aprilFools = timedEventManager.isAprilFoolsActive();
-    const logoKey = timedEventManager.getLogoKey();
-    return aprilFools === !!randInt(FAKE_TITLE_LOGO_CHANCE) ? "logo_fake" : logoKey;
   }
 
   /** Adds a snow effect on the title screen during the winter season. */

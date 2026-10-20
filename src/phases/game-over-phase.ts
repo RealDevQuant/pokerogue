@@ -154,7 +154,7 @@ export class GameOverPhase extends BattlePhase {
       // Pokegame: the run is over, close it on the server (no more points for this seed)
       reportSession(
         {
-          slot: globalScene.sessionSlotId,
+          slot: globalScene.sessionSlotId ?? 0,
           wave: globalScene.currentBattle.waveIndex,
           mode: String(globalScene.gameMode.modeId),
           playTime: globalScene.sessionPlayTime,
