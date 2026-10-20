@@ -141,7 +141,6 @@ import { playTween } from "#utils/anim-utils";
 import {
   BooleanHolder,
   fixedInt,
-  formatMoney,
   getBiomeName,
   getIvsFromId,
   isBetween,
@@ -664,7 +663,7 @@ export class BattleScene extends SceneBase {
     this.updateBiomeWaveText();
     this.updateMoneyText();
     this.updateScoreText();
-    onCreditsChange(() => this.updateScoreText()); // Pokegame: redraw when the server reports new credits
+    onCreditsChange(() => this.updateMoneyText(false)); // Pokegame: redraw when the server reports new credits
   }
 
   async initExpSprites(): Promise<void> {
@@ -2165,7 +2164,9 @@ export class BattleScene extends SceneBase {
     if (this.money === undefined) {
       return;
     }
-    const formattedMoney = formatMoney(settings.display.moneyFormat, this.money);
+    // Pokegame: the ₽ line shows the player's credits (from the Pokegame server), not the run's money.
+    // The run's money still exists and is shown in the shop.
+    const formattedMoney = String(getCredits());
     this.moneyText.setText(i18next.t("battleScene:moneyOwned", { formattedMoney }));
     this.fieldUI.moveAbove(this.moneyText, this.luckText);
     if (forceVisible) {
@@ -2190,10 +2191,8 @@ export class BattleScene extends SceneBase {
   }
 
   updateScoreText(): void {
-    // Pokegame: the HUD shows the player's credits (points earned on the Pokegame server), in every mode
-    this.scoreText // formatting
-      .setText(`Credits: ${getCredits()}`)
-      .setVisible(true);
+    // Pokegame: no score line; the ₽ line is the credits counter
+    this.scoreText.setText("").setVisible(false);
   }
 
   /**
