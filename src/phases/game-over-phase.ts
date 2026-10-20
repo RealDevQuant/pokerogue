@@ -4,6 +4,7 @@ import { audioManager } from "#app/global-audio-manager";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/global-settings-manager";
 import { speciesDataRegistry } from "#app/global-species-data-registry";
+import { reportSession } from "#app/pokegame/hook";
 import { bypassLogin } from "#constants/app-constants";
 import { modifierTypes } from "#data/data-lists";
 import { getCharVariantFromDialogue } from "#data/dialogue";
@@ -150,6 +151,17 @@ export class GameOverPhase extends BattlePhase {
   handleGameOver(): void {
     const doGameOver = (newClear: boolean) => {
       globalScene.disableMenu = true;
+      // Pokegame: the run is over, close it on the server (no more points for this seed)
+      reportSession(
+        {
+          slot: globalScene.sessionSlotId,
+          wave: globalScene.currentBattle.waveIndex,
+          mode: String(globalScene.gameMode.modeId),
+          playTime: globalScene.sessionPlayTime,
+          seed: globalScene.seed,
+        },
+        true,
+      );
       globalScene.time.delayedCall(1000, () => {
         let firstClear = false;
         if (this.isVictory) {

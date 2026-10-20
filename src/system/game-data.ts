@@ -8,6 +8,7 @@ import { globalScene } from "#app/global-scene";
 import { settings } from "#app/global-settings-manager";
 import { speciesDataRegistry } from "#app/global-species-data-registry";
 import { activeOverrides } from "#app/overrides";
+import { reportSession } from "#app/pokegame/hook";
 import { isIos } from "#app/touch-controls";
 import { Tutorial } from "#app/tutorial";
 import { speciesEggMoves } from "#balance/egg-moves";
@@ -1242,6 +1243,15 @@ export class GameData {
       getSessionDataLocalStorageKey(globalScene.sessionSlotId),
       encrypt(JSON.stringify(sessionData), bypassLogin),
     );
+
+    // Pokegame: every save is a wave reached; the server turns it into points.
+    reportSession({
+      slot: globalScene.sessionSlotId,
+      wave: sessionData.waveIndex,
+      mode: String(sessionData.gameMode),
+      playTime: sessionData.playTime,
+      seed: sessionData.seed,
+    });
 
     console.debug(`Session data saved to slot ${globalScene.sessionSlotId}!`);
 

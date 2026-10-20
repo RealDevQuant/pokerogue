@@ -80,7 +80,8 @@ export default defineConfig(async config => {
 
   return {
     ...(await sharedConfig(config)),
-    base: "",
+    // Pokegame serves the game under a sub-path (VITE_BASE=/rogue/); empty = site root as upstream
+    base: loadEnv(mode, process.cwd()).VITE_BASE || "",
     publicDir: command === "serve" ? "assets" : false,
     server: {
       port: Number.isNaN(envPort) ? 8000 : envPort,
