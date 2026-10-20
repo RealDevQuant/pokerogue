@@ -157,7 +157,7 @@ export class GameOverPhase extends BattlePhase {
           slot: globalScene.sessionSlotId ?? 0,
           wave: globalScene.currentBattle.waveIndex,
           mode: String(globalScene.gameMode.modeId),
-          playTime: globalScene.sessionPlayTime,
+          playTime: globalScene.sessionPlayTime ?? 0,
           seed: globalScene.seed,
         },
         true,

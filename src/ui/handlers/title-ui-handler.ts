@@ -182,7 +182,10 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     this.usernameLabel.setOrigin(0, 1).setPosition(2, scaledHeight - 2);
     this.playerCountLabel.setVisible(false);
 
-    this.splashMessage = randItem(getSplashMessages());
+    // Pokegame: no server stats behind the title, so skip the splashes that need them
+    this.splashMessage = randItem(
+      getSplashMessages().filter(m => m !== "splashMessages:battlesWon" && m !== "splashMessages:itsBeenTotalRuns"),
+    );
     this.splashMessageText.setText(i18next.t(this.splashMessage, this.getSplashMessageI18nParams()));
 
     const betaText = isBeta || isDev ? " (Beta)" : "";
