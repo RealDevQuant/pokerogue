@@ -156,6 +156,8 @@ await i18next
   .use(new KoreanPostpositionProcessor())
   .init(
     {
+      // Pokegame: English only, whatever the browser says
+      lng: "en",
       fallbackLng: {
         "es-419": ["es-ES", "en"],
         default: ["en"],
@@ -199,7 +201,7 @@ await i18next
     },
     async () => {
       i18next.services.formatter?.add("money", i18nMoneyFormatter);
-      await initFonts(localStorage.getItem("prLang") ?? undefined);
+      await initFonts("en");
     },
   );
 
