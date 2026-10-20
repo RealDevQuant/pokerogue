@@ -111,7 +111,7 @@ export class TitlePhase extends Phase {
             },
           });
           newGameOptions.push({
-            label: i18next.t("menu:dailyRun"),
+            label: `${i18next.t("menu:dailyRun")} · 2x points`, // Pokegame: the gentle nudge
             handler: () => {
               this.initDailyRun();
               return true;
