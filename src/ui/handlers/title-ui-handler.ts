@@ -5,8 +5,8 @@ import { timedEventManager } from "#app/global-event-manager";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/global-settings-manager";
 import { speciesDataRegistry } from "#app/global-species-data-registry";
+import { POKEGAME_LOGO } from "#app/pokegame/logo";
 import { bypassLogin, isBeta, isDev } from "#constants/app-constants";
-import { getSplashMessages } from "#data/splash-messages";
 import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -70,9 +70,22 @@ export class TitleUiHandler extends OptionSelectUiHandler {
       .setAlpha(0);
     ui.add(this.titleContainer);
 
-    // Pokegame: a text title instead of the PokéRogue logo (same place, same height as the 150x33 image)
-    const logo = addTextObject(width / 2, 10, "PokeGame", TextStyle.MESSAGE, { fontSize: "216px" }) // formatting
+    // Pokegame: a text title instead of the PokéRogue logo (same place, same height as the 150x33 image), with our ball on the left
+    const logo = addTextObject(width / 2 + 10, 10, "PokeGame", TextStyle.MESSAGE, { fontSize: "216px" }) // formatting
       .setOrigin(0.5, 0);
+    const addBall = () => {
+      const ball = globalScene.add
+        .image(logo.x - logo.displayWidth / 2 - 14, logo.y + logo.displayHeight / 2, "pokegame_logo")
+        .setOrigin(0.5)
+        .setDisplaySize(26, 26);
+      this.titleContainer.add(ball);
+    };
+    if (globalScene.textures.exists("pokegame_logo")) {
+      addBall();
+    } else {
+      globalScene.textures.once("addtexture-pokegame_logo", addBall);
+      globalScene.textures.addBase64("pokegame_logo", POKEGAME_LOGO);
+    }
 
     if (timedEventManager.isEventActive()) {
       this.eventDisplay = new TimedEventDisplay(0, 0, timedEventManager.activeEvent());
@@ -182,11 +195,9 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     this.usernameLabel.setOrigin(0, 1).setPosition(2, scaledHeight - 2);
     this.playerCountLabel.setVisible(false);
 
-    // Pokegame: no server stats behind the title, so skip the splashes that need them
-    this.splashMessage = randItem(
-      getSplashMessages().filter(m => m !== "splashMessages:battlesWon" && m !== "splashMessages:itsBeenTotalRuns"),
-    );
-    this.splashMessageText.setText(i18next.t(this.splashMessage, this.getSplashMessageI18nParams()));
+    // Pokegame: one slogan instead of the random splash messages
+    this.splashMessage = "pokegame:slogan";
+    this.splashMessageText.setText("Gotta catch 'em all!");
 
     const betaText = isBeta || isDev ? " (Beta)" : "";
     this.appVersionText.setText("v" + version + betaText);

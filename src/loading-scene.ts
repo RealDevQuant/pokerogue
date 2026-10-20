@@ -490,13 +490,11 @@ export class LoadingScene extends SceneBase {
 
     this.load
       .once(this.LOAD_EVENTS.START, () => {
-        // videos do not need to be preloaded
-        intro.loadURL("images/intro_dark.mp4", true);
-        if (mobile) {
-          intro.video?.setAttribute("webkit-playsinline", "webkit-playsinline");
-          intro.video?.setAttribute("playsinline", "playsinline");
+        // Pokegame: no intro video, straight to the loading bar
+        intro.destroy();
+        for (const g of loadingGraphics) {
+          g.setVisible(true);
         }
-        intro.play();
       })
       .on(this.LOAD_EVENTS.PROGRESS, (progress: number) => {
         percentText.setText(`${Math.floor(progress * 100)}%`);
