@@ -70,7 +70,7 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     ui.add(this.titleContainer);
 
     // Pokegame: a text title instead of the PokéRogue logo (same place, same height as the 150x33 image)
-    const logo = addTextObject(width / 2, 10, "PokeGame", TextStyle.MESSAGE, { fontSize: "216px" }) // formatting
+    const logo = addTextObject(width / 2, 10, "PokeBattle", TextStyle.MESSAGE, { fontSize: "216px" }) // formatting
       .setOrigin(0.5, 0);
 
     if (timedEventManager.isEventActive()) {
@@ -177,8 +177,11 @@ export class TitleUiHandler extends OptionSelectUiHandler {
 
     this.updateUsername();
 
-    // Pokegame: username bottom-left, no online player count
-    this.usernameLabel.setOrigin(0, 1).setPosition(2, scaledHeight - 2);
+    // Pokegame: no username and no online player count on the title screen
+    this.usernameLabel
+      .setOrigin(0, 1)
+      .setPosition(2, scaledHeight - 2)
+      .setVisible(false);
     this.playerCountLabel.setVisible(false);
 
     // Pokegame: one slogan instead of the random splash messages

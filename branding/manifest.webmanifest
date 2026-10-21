@@ -1,0 +1,14 @@
+{
+  "name": "PokeBattle",
+  "short_name": "PokeBattle",
+  "description": "Play Pokémon, stack credits and win packs every 10 minutes.",
+  "scope": "/pokebattle/",
+  "start_url": "/pokebattle/",
+  "display": "fullscreen",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "icons": [
+    { "src": "logo128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "logo512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -68,6 +68,7 @@ export const sharedConfig: UserConfigFnPromise = async ({ mode }) => {
       (await import("./plugins/vite/namespaces-i18n-plugin.ts")).LocaleNamespace(),
       (await import("unplugin-inline-enum/vite")).default({ scanDir: "src" }),
       (await import("./plugins/vite/static-shell-plugin.ts")).staticShellPlugin(),
+      (await import("./plugins/vite/branding-plugin.ts")).brandingPlugin(), // Pokegame: our icons and manifest over the assets
     ];
   }
   return opts;
