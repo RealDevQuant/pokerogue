@@ -188,7 +188,7 @@ export class TitlePhase extends Phase {
         keepOpen: true,
       },
       {
-        label: "Website", // Pokegame: back to the site (profile, wallet, cards)
+        label: "WEB", // Pokegame: back to the site (profile, wallet, cards)
         handler: () => {
           window.location.href = "/";
           return true;
