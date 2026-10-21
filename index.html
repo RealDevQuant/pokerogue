@@ -26,8 +26,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<meta property="twitter:image" content="https://pokebattle.tech/og.png" />
 	<meta property="twitter:card" content="summary" />
 	<meta property="twitter:url" content="https://pokerogue.net" />
-	<link rel="apple-touch-icon" href="./logo512.png" />
-	<link rel="shortcut icon" type="image/png" href="./logo512.png" />
+	<link rel="apple-touch-icon" href="./logo512.png?v=pokebattle2" />
+	<link rel="icon" type="image/png" sizes="128x128" href="./logo128.png?v=pokebattle2" />
+	<link rel="shortcut icon" type="image/png" href="./logo512.png?v=pokebattle2" />
 	<link rel="canonical" href="https://pokerogue.net" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
 	<style type="text/css">
@@ -42,6 +43,26 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="./index.css" />
+	<!-- Pokegame: a small controls legend, shown once, Esc or X closes it, "?" reopens it -->
+	<style>
+		#pb-help { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 10, 0.78); backdrop-filter: blur(6px); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #f3f1fa; }
+		#pb-help[hidden] { display: none; }
+		#pb-help .pb-card { width: min(92vw, 640px); max-height: 90vh; overflow: auto; background: #12111a; border: 1px solid #342f4d; border-radius: 18px; padding: 22px 24px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+		#pb-help h2 { margin: 0 0 4px; font-size: 1.4rem; }
+		#pb-help .pb-sub { margin: 0 0 16px; color: #9a97ad; font-size: .9rem; }
+		#pb-help .pb-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+		#pb-help h3 { margin: 0 0 8px; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #14f195; }
+		#pb-help dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: .92rem; align-items: center; }
+		#pb-help dt { margin: 0; }
+		#pb-help dd { margin: 0; color: #cfccdd; }
+		#pb-help kbd { display: inline-block; min-width: 1.6em; padding: 2px 7px; border-radius: 6px; background: #1b1033; border: 1px solid #5b3fa0; color: #fff; font: 600 .82rem/1.3 system-ui, sans-serif; text-align: center; }
+		#pb-help .pb-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+		#pb-help .pb-hint { color: #9a97ad; font-size: .82rem; }
+		#pb-help button { font: 700 .95rem system-ui, sans-serif; padding: 10px 22px; border-radius: 999px; border: 0; cursor: pointer; color: #0a0a0f; background: linear-gradient(90deg, #9945ff, #14f195); }
+		#pb-help-btn { position: fixed; top: 8px; left: 8px; z-index: 9998; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(10,10,15,.55); color: #fff; font: 700 15px/1 system-ui, sans-serif; cursor: pointer; opacity: .55; }
+		#pb-help-btn:hover { opacity: 1; }
+		@media (max-width: 600px) { #pb-help .pb-cols { grid-template-columns: 1fr; } #pb-help .pb-card { padding: 18px; } }
+	</style>
 	<link rel="manifest" href="./manifest.webmanifest">
   <script>
     if ("serviceWorker" in navigator) {
@@ -66,6 +87,60 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <body>
 	<div id="app"></div>
+	<button id="pb-help-btn" type="button" title="Controls" aria-label="Controls">?</button>
+	<div id="pb-help" hidden role="dialog" aria-label="Controls">
+		<div class="pb-card">
+			<h2>Controls</h2>
+			<p class="pb-sub">Every wave you clear is a credit. Sign in on the site so they count.</p>
+			<div class="pb-cols">
+				<div>
+					<h3>Keyboard</h3>
+					<dl>
+						<dt><kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8595;</kbd><kbd>&#8594;</kbd></dt><dd>Move (or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>)</dd>
+						<dt><kbd>Space</kbd> <kbd>Z</kbd></dt><dd>Confirm, attack</dd>
+						<dt><kbd>Enter</kbd></dt><dd>Submit</dd>
+						<dt><kbd>Backspace</kbd> <kbd>X</kbd></dt><dd>Back, cancel</dd>
+						<dt><kbd>Esc</kbd> <kbd>M</kbd></dt><dd>Menu (WEB takes you back to the site)</dd>
+						<dt><kbd>C</kbd></dt><dd>Stats</dd>
+						<dt><kbd>R</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>E</kbd> <kbd>N</kbd> <kbd>V</kbd></dt><dd>Starter screen: shiny, form, gender, ability, nature, tera</dd>
+					</dl>
+				</div>
+				<div>
+					<h3>Phone</h3>
+					<dl>
+						<dt><kbd>D-pad</kbd></dt><dd>Move</dd>
+						<dt><kbd>A</kbd></dt><dd>Confirm, attack</dd>
+						<dt><kbd>B</kbd></dt><dd>Back, cancel</dd>
+						<dt><kbd>Menu</kbd></dt><dd>Menu (WEB takes you back to the site)</dd>
+						<dt><kbd>Stats</kbd></dt><dd>Stats</dd>
+					</dl>
+					<p class="pb-hint" style="margin-top:10px">Turn the phone sideways for the full screen.</p>
+				</div>
+			</div>
+			<div class="pb-foot">
+				<span class="pb-hint">Close with <kbd>Esc</kbd> or <kbd>X</kbd>. Open again with the <kbd>?</kbd> top left.</span>
+				<button type="button" id="pb-help-close">Got it</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		(function () {
+			var help = document.getElementById("pb-help"), btn = document.getElementById("pb-help-btn"), close = document.getElementById("pb-help-close");
+			var KEY = "pokebattle:help-seen";
+			function open() { help.hidden = false; }
+			function shut() { help.hidden = true; try { localStorage.setItem(KEY, "1"); } catch (e) {} }
+			btn.addEventListener("click", function () { help.hidden ? open() : shut(); });
+			close.addEventListener("click", shut);
+			help.addEventListener("click", function (e) { if (e.target === help) shut(); });
+			// while the legend is open, the keys that close it never reach the game
+			window.addEventListener("keydown", function (e) {
+				if (help.hidden) return;
+				if (["Escape", "x", "X", "Backspace", "Enter", " "].indexOf(e.key) >= 0) { e.preventDefault(); e.stopImmediatePropagation(); shut(); }
+			}, true);
+			var seen = false; try { seen = localStorage.getItem(KEY) === "1"; } catch (e) {}
+			if (!seen) open();
+		})();
+	</script>
 	<div id="touchControls">
 		<div class="left">
 			<div id="control-group-dpad" class="control-group control-group-dpad">
