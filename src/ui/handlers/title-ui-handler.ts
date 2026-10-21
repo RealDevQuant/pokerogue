@@ -107,6 +107,33 @@ export class TitleUiHandler extends OptionSelectUiHandler {
     this.appVersionText = addTextObject(logo.x - 60, logoHeight + 4, "", TextStyle.MONEY, { fontSize: "54px" }) // formatting
       .setOrigin();
 
+    // Pokegame: Ash (Red) in the middle of the title screen, animated like a trainer in battle
+    globalScene.loadAtlas("red", "trainer");
+    globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      if (!globalScene.textures.exists("red") || !this.titleContainer) {
+        return;
+      }
+      const ash = globalScene.add.sprite(width / 2, height / 2 + 38, "red").setOrigin(0.5, 1);
+      const total = globalScene.textures.get("red").frameTotal - 1;
+      if (total > 1) {
+        if (!globalScene.anims.exists("red")) {
+          const originalWarn = console.warn;
+          console.warn = () => {};
+          const frames = globalScene.anims.generateFrameNames("red", {
+            zeroPad: 4,
+            suffix: ".png",
+            start: 1,
+            end: total,
+          });
+          console.warn = originalWarn;
+          globalScene.anims.create({ key: "red", frames, frameRate: 12, repeat: -1 });
+        }
+        ash.play("red");
+      }
+      this.titleContainer.addAt(ash, 1); // over the background, under the text
+    });
+    globalScene.load.start();
+
     this.titleContainer.add([
       logo,
       this.usernameLabel,
