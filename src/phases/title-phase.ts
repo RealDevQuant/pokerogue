@@ -187,6 +187,13 @@ export class TitlePhase extends Phase {
         },
         keepOpen: true,
       },
+      {
+        label: "Website", // Pokegame: back to the site (profile, wallet, cards)
+        handler: () => {
+          window.location.href = "/";
+          return true;
+        },
+      },
     );
     const config: OptionSelectModeConfig = { options, blockCancelButton: true };
     await ui.setMode(UiMode.TITLE, config);

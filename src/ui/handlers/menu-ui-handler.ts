@@ -47,6 +47,7 @@ enum MenuOptions {
   POKEDEX,
   MANAGE_DATA,
   COMMUNITY,
+  WEBSITE, // Pokegame: back to the site (profile, wallet, cards)
   SAVE_AND_QUIT,
   LOG_OUT,
 }
@@ -195,7 +196,10 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       }
 
       return {
-        label: `${i18next.t(`menuUiHandler:${toCamelCase(MenuOptions[option])}`)}`,
+        label:
+          option === MenuOptions.WEBSITE
+            ? "Website"
+            : `${i18next.t(`menuUiHandler:${toCamelCase(MenuOptions[option])}`)}`,
         handler: () => this.optionSelected(option),
         keepOpen: true,
         ...conditionalOpts,
@@ -712,6 +716,11 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         } else {
           doSaveQuit();
         }
+        break;
+      }
+      case MenuOptions.WEBSITE: {
+        success = true;
+        window.location.href = "/";
         break;
       }
       case MenuOptions.LOG_OUT: {
